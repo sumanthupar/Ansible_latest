@@ -1,0 +1,7 @@
+---
+# vars file for docker
+docker_url: "https://download.docker.com/linux/centos/docker-ce.repo"
+docker_pack:
+  - docker-ce 
+  - docker-ce-cli 
+  - containerd.io

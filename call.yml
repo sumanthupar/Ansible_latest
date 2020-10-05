@@ -1,8 +1,8 @@
 ---
 - name: calling roles
-  hosts: cent3
-  gather_facts: no
+  hosts: localhost
   roles:
 #    - tomcat
-    - lvms
+#    - lvms
+    - docker
   
