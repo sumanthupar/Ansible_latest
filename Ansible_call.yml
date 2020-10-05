@@ -1,0 +1,5 @@
+---
+- name: Calling ansible role
+  hosts: master
+  roles:
+    - ansible

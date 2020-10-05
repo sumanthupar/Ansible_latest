@@ -1,0 +1,8 @@
+---
+- name: calling roles
+  hosts: master
+  roles:
+#    - tomcat
+#    - lvms
+    - docker
+  
