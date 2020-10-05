@@ -1,0 +1,99 @@
+---
+###################
+- name: One
+  hosts: jenk
+  gather_facts: no
+  vars:
+    name: sumanth
+    age: 30
+  tasks:
+    - name: debug levels
+      debug: 
+        msg: 
+          - name is {{ name }}
+          - age os {{ age }}
+#######################################
+
+- name: Two
+  hosts: jenk
+  gather_facts: no
+  vars:				###dictionary lists
+    users:
+      - name: sum12
+        uid: 1200
+        shell: /bin/bash
+      - name: sum23
+        uid: 1300
+        shell: /bin/false
+  tasks:
+    - name: debug2
+      user:
+        name: "{{ item.name }}"
+        uid:  "{{ item.uid }}"
+        shell: "{{ item.shell }}"
+      with_items:
+        - "{{ users }}"
+      when: item.name  == 'sum12' 		###Conditional execution with loop
+
+###########################################
+- name: Three
+  hosts: jenk
+  gather_facts: no
+  vars:
+    name:
+      - 1
+      - 2
+      - 3
+   
+  tasks:
+    - name: debug3
+      debug:
+        msg: "{{ item }}"
+      with_items:
+        - "{{ name[2] }}"
+########################################
+
+- name: using vars_files
+  hosts: jenk
+  gather_facts: no
+  vars_files:
+    - "setvar.yml"
+  tasks:
+    - name: abc
+      set_fact: 
+        var: setvar3
+    - include_vars: setvar2.yml
+
+    - name: debug
+      delegate_to: localhost
+      debug:
+        msg: Hi variable is {{ var }}
+########################################
+
+- name: fourth
+  hosts: jenk
+  gather_facts: no
+  vars:
+    user:
+      id: 11
+      age: 22
+  tasks:
+    - name: print
+      debug:
+        msg: id is {{ item.id }} age is {{ item.age }}
+      with_items: 
+        - "{{ user }}"
+
+#########################################
+
+- name: fifth
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: debug messages and chekc
+      debug:
+        msg: printing var2 {{ var2 }}
+#      when: var2 is defined and var2|length > 0
+      when: var2 is search("/suman/")
+
+

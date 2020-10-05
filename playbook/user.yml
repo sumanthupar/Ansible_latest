@@ -1,0 +1,41 @@
+---
+- name: users files
+  hosts: jenk
+  gather_facts: no
+  vars:
+    users:
+      - sum12
+      - sum13
+    group1:
+      - tmn
+      - newgrp
+  tasks:
+    - name: create groups
+      group:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - "{{ group1 }}"
+
+    - name: check if tmn group exists
+      shell: cat /etc/group | grep "tmn" >/dev/null
+      register: grpex
+      
+
+    - name: create users
+      user:
+        name: "{{ item }}"
+        state: present
+        groups: tmn
+        append: yes
+      with_items:
+        - "{{ users }}"
+      when: grpex.rc != 0
+
+    - name: line infile
+      lineinfile: 
+        path: /etc/sudoers
+        backup: yes
+        line: '%tmn        ALL=(ALL)       NOPASSWD: ALL'
+        state: present
+      

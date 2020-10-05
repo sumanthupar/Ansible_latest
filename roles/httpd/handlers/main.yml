@@ -1,0 +1,11 @@
+---
+# handlers file for httpd
+
+- name: restart httpd
+  service: 
+    name: httpd
+    state: restarted
+    enabled: yes
+
+- name: reload firewall
+  command: firewall-cmd --reload

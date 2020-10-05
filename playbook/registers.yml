@@ -1,0 +1,38 @@
+---
+- name: register things 
+  hosts: jenk
+  gather_facts: no
+  tasks:
+    - name: task1
+      shell: ls | grep "stackakja.yml"
+      register: sta
+#      ignore_errors: yes
+      failed_when: sta.rc == 2
+
+    - name: print 
+      debug:
+        msg: stack.yml is present
+      when: sta.rc == 0
+      
+####################################
+
+- name: register things
+  hosts: jenk
+  gather_facts: no
+  tasks:
+    - name: task1
+      shell: ls 
+      register: sta
+#      ignore_errors: yes
+      failed_when: sta.rc == 2
+
+    - name: save output of register as list
+      set_fact: 
+        out_list: "{{ sta.stdout_lines | list }}"
+
+    - name: print
+      debug:
+        msg: file is {{ item }}
+      with_items:
+        - "{{ out_list }}"
+

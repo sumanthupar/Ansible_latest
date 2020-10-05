@@ -1,0 +1,6 @@
+[jenk]
+192.168.111.138 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass=eci_root
+
+[cent3]
+192.168.111.136	ansibble_connection=ssh	ansible_ssh_user=root	ansible_ssh_pass=eci_root
+

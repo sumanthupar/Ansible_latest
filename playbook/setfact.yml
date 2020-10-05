@@ -1,0 +1,36 @@
+---
+- name: play one
+  hosts: jenk
+  gather_facts: no
+  strategy: free
+  vars:
+    name: "ansible.com"
+  tasks:
+    - name: kkk
+      shell: echo {{ name }} | cut -d "." -f1
+      register: mkl
+
+    - name: debig
+      set_fact:
+        name2: "{{ mkl.stdout }}"
+
+    - debug: 
+        msg: var is  {{ name2 }}
+
+
+- name: play 2
+  hosts: jenk
+  gather_facts: no
+  vars:
+    var1: "test1,test2"
+  strategy: free
+  tasks:
+    - name: set fact
+      set_fact:
+        grps: "{{ var1.split(',') | list }}"
+ 
+    - name: print 
+      debug:
+        msg: val is {{ item }}
+      with_items:
+        - "{{ grps }}"

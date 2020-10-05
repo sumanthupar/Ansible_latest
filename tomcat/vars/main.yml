@@ -1,0 +1,6 @@
+---
+# vars file for tomcat
+mount_point: "/mnt"
+tomcat_url: "https://downloads.apache.org/tomcat/tomcat-9/v9.0.38/bin/apache-tomcat-9.0.38.tar.gz"
+tomcat_dest: "/opt/tomcat"
+

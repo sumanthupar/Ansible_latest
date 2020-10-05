@@ -1,0 +1,7 @@
+---
+# tasks file for lvms
+- name: deactivate lvm
+  lvol:
+    vg: sumvg
+    lv: sumlv
+    active: true

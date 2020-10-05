@@ -1,0 +1,19 @@
+- name: check if /dev/sr0 is mounted
+  shell: mount | grep "/dev/sr0 on {{ mount_point }}"
+  register: mnt
+  ignore_errors: yes
+
+- name: mount if not mounted
+  shell: mount /dev/sr0 {{ mount_point }}
+  when: mnt.rc != 0
+
+- name: create yum repository
+  yum_repository:
+    name: mainrepo
+    description: mainrepo
+    baseurl: "file://{{ mount_point }}"
+    enabled: yes
+    gpgcheck: no
+    file: mainrepo
+
+

@@ -1,0 +1,37 @@
+---
+- name: play one
+  hosts: jenk
+  gather_facts: no
+  tasks:
+    - name: set fact
+      set_fact:
+        contents: "{{ lookup('file', 'newfile' ) }}"
+    - name: use lookups
+      debug:
+       msg: the value of file is {{ contents }}
+  
+
+- name: play two
+  hosts: localhost
+  gather_facts: no
+  vars:
+    newn: "{{ lookup('csvfile', 'sumanth file=test.csv delimiter=, col=2 ') }}"
+  tasks:
+    - name: print
+      debug:
+        msg: value of newn is {{ newn }}
+
+- name: play three
+  hosts: localhost
+  gather_facts: no
+#  vars: 
+#    homed: "{{ lookup('env', 'XDG_DATA_DIRS1') }}"
+  tasks:
+    - name: setfatcs
+      set_fact:
+        homed: "{{ lookup('env', 'XDG_DATA_DIRS1') }}"
+
+    - name: print2
+      debug:
+        msg: value of home is {{ homed }}
+      when: homed | length > 0

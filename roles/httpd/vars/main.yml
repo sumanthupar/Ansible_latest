@@ -1,0 +1,8 @@
+---
+# vars file for httpd
+base_url: "file:///mnt"
+repo_name: httpd 
+httpd_index: "/var/www/html/index.html"
+httpd_conf: "/etc/httpd/conf/httpd.conf"
+port_num: "81"
+

@@ -1,0 +1,7 @@
+---
+# tasks file for test
+
+- name: copy files
+  copy: 
+    dest: testfile22
+    content: file is {{ var1 }}

@@ -1,0 +1,74 @@
+---
+# tasks file for tomcat
+- include: yum.yml
+
+- name: setting var pack
+  set_fact:
+    pack: "java-1.8.0-openjdk-devel"
+
+- include: install.yml
+
+- name: create user tomcat
+  user:
+    name: tomcat
+    shell: /bin/false
+    home: /opt/tomcat
+
+- name: download apache tomcat
+  get_url:
+    url: "{{ tomcat_url }}"
+    dest: "{{ tomcat_dest }}"
+
+- name: get basename from url
+  set_fact: 
+    tomcat_pack: "{{ tomcat_url | basename }}"
+
+- name: extract tomcat zip file 
+  unarchive:
+    src: "{{ tomcat_dest }}/{{ tomcat_pack }}"
+    dest: "{{ tomcat_dest }}"
+    remote_src: yes
+
+- name: remove tar.gz file 
+  file: 
+    path: "{{ tomcat_dest }}/{{ tomcat_pack }}"
+    state: absent
+
+- name: list name of package
+  shell: echo {{ tomcat_pack }} | cut -d "." -f1-3
+  register: tomcatname
+
+- name: set directory facts
+  set_fact:
+    tom_name: "{{ tomcatname.stdout }}"
+
+- name: create link
+  file:
+    src: "{{ tomcat_dest }}/{{ tom_name }}"
+    dest: "{{ tomcat_dest }}/latest"
+    state: link
+
+- name: change permission of /opt/tomcat/latest
+  file:
+    path: "{{ tomcat_dest }}"
+    mode: 0755
+    recurse: yes
+    state: directory
+
+- name: copy tomcat.service
+  copy:
+    src: tomcat.service
+    dest: /etc/systemd/system/tomcat.service
+
+- name: daemon reload
+  systemd:
+    daemon_reload: yes
+  notify: start tomcat
+
+- name: add 8080 port to firewall
+  firewalld:
+    zone: public
+    port: 8080/tcp
+    state: enabled
+
+

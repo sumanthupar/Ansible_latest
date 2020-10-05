@@ -1,0 +1,13 @@
+---
+- name: test filters
+  hosts: localhost
+  gather_facts: no
+  vars:
+    newn: abc
+  tasks:
+    - name: print
+      debug: 
+        msg: value of newn is {{ newn }}
+      when: newn is integer
+ 
+  

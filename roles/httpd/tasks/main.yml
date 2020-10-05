@@ -1,0 +1,42 @@
+---
+# tasks file for httpd
+- name: mount /dev/sr0 on /mnt
+  command: mount /dev/sr0 /mnt
+  ignore_errors: yes
+
+- name: create yum repository
+  yum_repository:
+    name: "{{ repo_name }}"
+    baseurl: "{{ base_url }}"
+    enabled: yes
+    gpgcheck: no
+    description: "httpd repo"
+
+- name: installd httpd package
+  yum:
+    name: httpd
+    state: installed
+
+- name: copy index.j2 to index.html
+  template:
+    src: index.j2
+    dest: "{{ httpd_index }}"
+    mode: 0755
+
+- name: Change httpd listen port 
+  lineinfile:
+    backup: yes
+    path: "{{ httpd_conf }}"
+    regexp: "^Listen 80"
+    line: "Listen {{ port_num }}"
+
+- name: allow port {{ port_num }} firewall
+  firewalld:
+    port: "{{ port_num }}/tcp"
+    zone: public
+    permanent: yes
+    immediate: yes
+    state: enabled
+  notify: 
+    - restart httpd
+    - reload firewall
