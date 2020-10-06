@@ -1,0 +1,49 @@
+- name: get kubernetes repository
+  copy:
+    src: kubernetes.repo
+    dest: /etc/yum.repos.d
+
+- name: install kube packages
+  yum:
+    name:
+      - kubelet
+      - kubeadm 
+      - kubectl
+    state: installed
+  notify: Start kubernetes
+
+- name: open firewall ports
+  firewalld:
+    zone: public
+    port: "{{ item }}"
+    state: enabled
+    permanent: yes
+    immediate: yes
+  with_items: "{{ fir_ports }}"
+  notify: Reload firewall
+
+- name: set selinux to permissive
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: change selinux to permissive in file
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=permissive'
+
+
+- name: comment swap line in /etc/fstab
+  shell: sed -i '/swap/s/^/#/' /etc/fstab
+  register: comment_swap
+
+- name: swap off
+  shell: swapoff -a
+  when: comment_swap.rc == 0
+ 
+
+ 
+-    
+
+    

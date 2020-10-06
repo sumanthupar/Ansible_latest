@@ -1,2 +1,14 @@
 ---
 # handlers file for kubernetes
+- name: Start kubernetes
+  service:
+    name: kubelet
+    state: started
+    enabled: yes
+
+- name: Reload firewall
+  systemd:
+    name: firewalld
+    state: reloaded
+
+  

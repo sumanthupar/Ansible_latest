@@ -1,2 +1,4 @@
 ---
 # tasks file for kubernetes
+- include: centos.yml
+  when: ansible_os_family == 'RedHat'
