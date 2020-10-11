@@ -1,0 +1,4 @@
+---
+# tasks file for jenk_change_home
+- include: centos.yml
+  when: ansible_os_family == 'RedHat'

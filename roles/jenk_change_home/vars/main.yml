@@ -1,0 +1,6 @@
+---
+# vars file for jenk_change_home
+jenkins_user: jenkins
+new_jenk_dir: "/root/new_jenk_dir"
+old_jenk_dir: "/var/lib/jenkins/"
+jenk_conf: "/etc/sysconfig/jenkins"

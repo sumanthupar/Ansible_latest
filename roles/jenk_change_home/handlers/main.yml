@@ -1,0 +1,7 @@
+---
+# handlers file for jenk_change_home
+- name: Start jenkins service
+  service:
+    name: jenkins
+    state: started
+    enabled: yes

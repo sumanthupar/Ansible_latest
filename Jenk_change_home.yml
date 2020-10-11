@@ -1,0 +1,5 @@
+---
+- name: localhost
+  hosts: localhost
+  roles:
+    - jenk_change_home

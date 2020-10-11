@@ -1,0 +1,10 @@
+---
+- name: copy directory contents
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: copy directory contents to new directory
+      copy:
+        src: /root/old/
+        dest: /root/new
+        remote_src: yes

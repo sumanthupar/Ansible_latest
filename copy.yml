@@ -1,0 +1,9 @@
+---
+- name: copy 
+  hosts: worker
+  tasks:
+    - name: copy 
+      copy:
+        content: sum
+        dest: newtxt
+  

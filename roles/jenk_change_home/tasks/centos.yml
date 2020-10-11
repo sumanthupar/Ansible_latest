@@ -1,0 +1,55 @@
+- name: check jenkins service status
+  shell: systemctl status jenkins
+  register: jenk_service
+  ignore_errors: yes
+
+- name: fail when jenkins service is running
+  fail:
+    msg: "Jenkins service is running, pls disable it and run again"
+  when: jenk_service.rc == 0
+
+- name: create new jenkins directory to be changed
+  file:
+    path: "{{ new_jenk_dir }}"
+    state: directory
+
+- name: check if jenkins user exists
+  shell: getent passwd jenkins
+  register: user_exists
+  failed_when: user_exists.rc != 0
+
+- name: copy jenkins directory contents to new directory
+  copy:
+    src: "{{ old_jenk_dir }}"
+    dest: "{{ new_jenk_dir }}"
+    remote_src: yes
+
+- name: chown -R jenkins:jenkins on {{ new_jenk_dir }}
+  file:
+    dest: "{{ new_jenk_dir }}"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_user }}"
+    recurse: yes
+
+- name: change jenkins user homedir
+  user:
+    name: "{{ jenkins_user }}"
+    home: "{{ new_jenk_dir }}"
+
+- name: change new jenk dir in /etc/sysconfig/jenkins
+  lineinfile:
+    path: "{{ jenk_conf }}"
+    regexp: "JENKINS_HOME="
+    line: 'JENKINS_HOME={{ new_jenk_dir }}'
+  notify: Start jenkins service
+
+    
+
+    
+  
+    
+
+
+
+
+
