@@ -1,6 +1,6 @@
 ---
 - name: calling roles
-  hosts: master
+  hosts: localhost
   roles:
 #    - tomcat
 #    - lvms

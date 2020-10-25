@@ -41,4 +41,3 @@
 - name: swap off
   shell: swapoff -a
   when: comment_swap.rc == 0
- 
