@@ -1,0 +1,10 @@
+---
+- name: print host vars
+  hosts: worker
+  gather_facts: false
+  tasks:
+    - name: print vari
+      debug:
+        msg: "{{ hostvars[groups['worker'][0]].var1 }}"
+        msg: "{{ inventory_hostname }}"
+        msg: "{{ hostvars[inventory_hostname].var1 }}"
